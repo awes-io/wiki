@@ -1,24 +1,24 @@
 # The &lt;form-builder&gt; Component
 
-It is a VueJS component of dynamic forms. It registers the `Vuex` store in the `Vue.prototype.$awesForms` variable. The 
+It is a VueJS component of dynamic forms. It registers the `Vuex` store in the `Vue.prototype.$awesForms` variable. The
 external data which are specified via the `store-data` parameter are extracted from the `AWES._store` general storage. As you can see from the example below, this component allows creating a form with different input fields, checkboxes, and buttons as well as validating it before submitting.
 
 ## Components
-* **General information**
-* [Auto Captcha](./auto-captcha.md)
-* [Checkbox](./checkbox.md)
-* [Company Slug](./company-slug.md)
-* [Editor](./editor.md)
-* [Input](./input.md)
-* [Multi Block](./multi-block.md)
-* [Phone](./phone.md)
-* [Radio Group](./radio-group.md)
-* [Select](./select.md)
-* [Slider](./slider.md)
-* [Switcher](./switcher.md)
-* [Textarea](./textarea.md)
-* [Uploader](./uploader.md)
-* [Validation Code](./code.md)
+* **Form Builder**
+* [Auto Captcha](./fb-auto-captcha.md)
+* [Checkbox](./fb-checkbox.md)
+* [Code](./fb-code.md)
+* [Company Slug](./fb-company-slug.md)
+* [Editor](./fb-editor.md)
+* [Input](./fb-input.md)
+* [Multi block](./fb-multi-block.md)
+* [Phone](./fb-phone.md)
+* [Radio Group](./fb-radio-group.md)
+* [Select](./fb-select.md)
+* [Slider](./fb-slider.md)
+* [Switcher](./fb-switcher.md)
+* [Textarea](./fb-textarea.md)
+* [Uploader](./fb-uploader.md)
 
 ## Example
 
@@ -33,7 +33,7 @@ external data which are specified via the `store-data` parameter are extracted f
 | Name                | Type      | Default             | Description                                       |
 |---------------------|:---------:|:-------------------:|---------------------------------------------------|
 | **name**            | `String`  | form-builder-${uid} | Identifier for calling and listening to the events |
-| **url(*)**          | `String`  | `undefined`         | Required field. Address where the form should be sent   |
+| **url(*)**          | `String`  | `undefined`         | Required field. Address where the form should be sent. Acceps a template, for example `/api/update/{records[0].id}`, will search for value in current form default data |
 | **method**          | `String`  | `'post'`            | Data submission method                            |
 | **default**         | `Object`  | `null`              | Object with  data                                 |
 | **store-data**      | `String`  | `undefined`         | Name of the data field in `AWES._store`           |
