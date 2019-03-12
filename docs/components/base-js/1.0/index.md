@@ -1,19 +1,11 @@
-# Пакет JS-core
+# JS-core package
 
-Предназначен для загрузки компонентов приложения и их синхронизации посредством шины событий
-
-1. [Подключение JS-core](#bjs-add)
-2. [Пример подключаемого плагина](#bjs-plugin)
-3. [Подключение модулей](#bjs-modules)
-4. [Шина событий](#bjs-event-bus)
-5. [AJAX-запрос на сервер](#bjs-ajax)
-6. [Языковые переменные](#bjs-lang)
-7. [Уведомления](#bjs-notify)
+The JS-core package is intended for downloading application components and their synchronization via the event bus.
 
 
-## <a name="bjs-add"></a> Подключение JS-core
+## <a name="bjs-add"></a> JS-core installation
 
-Для работы приложения необходимо указать ключ проекта в глобальной переменной `AWES_CONFIG.key`
+To use the application, you should specify a project key in the `AWES_CONFIG.key` global variable. Below you can find an example of using such a key in your HTML document:
 
 ``` html
 <!DOCTYPE html>
@@ -21,14 +13,14 @@
     <head>
         <title>Document</title>
 
-        <!-- config ( должен быть определён раньше js-core ) -->
+        <!-- config (it should be defined before JS-core) -->
         <script>
         const AWES_CONFIG = {
             key: 'your_project_key_goes_here'
         }
         </script>
 
-        <!-- js-core script -->
+        <!-- JS-core script -->
         <script src="https://storage.awes.io/your_project_key_goes_here/awes-core/v0.x.x/js/main.js" async></script>
     </head>
     <body>
@@ -38,15 +30,15 @@
 ```
 
 
-## <a name="bjs-plugin"></a> Пример подключаемого плагина
+## <a name="bjs-plugin"></a> Example of using component
 
 ``` javascript
-// IIFE для локальной области видимости
+// IIFE for the local visibility scope
 (function(){
 
     const plugin = {
 
-        // Список зависимостей, необходимых для работы плагина
+        // List of dependencies required for the work of component
         modules: {
             'vue': 'https://unpkg.com/vue@2.5.21/dist/vue.js',
             'lodash': 'https://unpkg.com/lodash@4.17.11/lodash.min.js',
@@ -63,7 +55,7 @@
             }
         },
 
-        // js-core сначала загрузит все модули их объекта modules, а затем запусит функцию install, в которую в качестве аргумента передает себя
+        // At first JS-core will load all the modules from the Modules object and then it will run the Install function where it will transmit itself as an argument
         install( AWES ) {
             AWES.on('test', function(e){
                 console.log('From plugin 1 ', e.detail);
@@ -71,7 +63,7 @@
         }
     }
 
-    // На случай, если js-core не успел загрузиться асинхронно, плагин помещается в очередь window.__awes_plugins_stack__
+    // In case JS-core hasn’t loaded asynchronously, the component will be placed in the window.__awes_plugins_stack__ queue
     if ( 'AWES' in window ) {
         AWES.use(plugin)
     } else {
@@ -81,24 +73,24 @@
 })()
 ```
 
-### <a name="bjs-modules"></a> Подключение модулей
+### <a name="bjs-modules"></a> Installation of modules
 
-Для загрузки модулей используется библиотека [loadjs](https://github.com/muicss/loadjs)
+For loading modules the [loadjs](https://github.com/muicss/loadjs) library is used. It is a tiny async loading library for modern browsers.
 
-Модули плагина загружаются автоматически, если необходимо программно загрузить дополнительные модули, использется глобальный метод `AWES.utils.loadModules`, который возвращает `Promise`(разрешается при загрузке всех модулей)
+The component modules are loaded automatically. If you need to load some additional modules to your software, you can use the `AWES.utils.loadModules` global method which returns the `Promise`(allowed when loading all the modules).
 
 ``` javascript
 modules: {
 
-    // простая загрузка, без зависимости от других модулей и функции обратного вызова
+    // simple loading, without depending on any other modules and the callback function
     module_name: {
         src: 'http://cdn.url-to-module',
     }
-    // также может быть записана в упрощенном виде
+    // can also be written in a simplified form
     module_name: 'http://cdn.url-to-module',
 
 
-    // Если нужно загрузить модуль, только после загрузки других модулей, от которых он зависит, необходимо указать массив имен зависимостей
+    // To load the module only after loading all other modules on which it depends, you should specify the array of dependencies‘ names
     depend_on: 'http://cdn.url-to-module'
     dependent: {
         src: 'http://cdn.url-to-dependent-module',
@@ -106,7 +98,7 @@ modules: {
     }
 
 
-    // Если нужно выполнить какие-то действия после загрузки модуля, то нужно указать функцию обратного вызова
+    // If you need to perform any actions after loading the module, please specify the callback function
     module_name: {
         src: 'http://cdn.url-to-module',
         cb: function() {
@@ -117,25 +109,25 @@ modules: {
 ```
 
 
-## <a name="bjs-event-bus"></a> Шина событий
+## <a name="bjs-event-bus"></a> Event bus
 
-Для взаимодействия модулей друг с другом используется шина событий, которая доступна через глобальную переменную `AWES`. Механизм работы основан на [CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent) *Если браузер не поддерживает CustomEvent, полифилл установится* **автоматически**
+The event bus is used for modules interaction. It is accessible through the `AWES` global variable. The mechanism of the event bus work is based on the  [CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent) constructor. *If your browser does not support CustomEvent, the polyfill will be installed* **automatically**. Example of use:
 
 ``` javascript
-// Подписка на событие
+// Subscription to an event
 AWES.on('someEvent', handler)
 
-// Отмена подписки на событие
+// Unsubsctiption to an event
 AWES.off('someEvent', handler)
 
-// Единоразовая подписка
+// Onetime subscription
 AWES.once('someEvent', handler)
 
-// Запуск события
+// Event triggering
 AWES.emit('someEvent')
 ```
 
-В обработчик события можно передавать аргументы
+It is possible to pass arguments to the event handler. See example below:
 
 ``` javascript
 AWES.on('double', function($event){
@@ -143,26 +135,26 @@ AWES.on('double', function($event){
 })
 
 AWES.emit('double', 123)
-// В консоли будет 246
+// The value in the console will be 246
 ```
 
 
-## <a name="bjs-ajax"></a> AJAX-запрос на сервер
+## <a name="bjs-ajax"></a> AJAX request to the server
 
-Глобальный метод `AWES.ajax` оправляет запрос на сервер и возвращает Promise, который разрешается как при успешном ответе так и при ошибке. Определить статус ответа можно по свойству `success`. Механизм реализован через библиотеку [axios](https://github.com/axios/axios).
+The `AWES.ajax` global method sends a request to the server and returns the Promise which may be used not only when a response is successful, but also when an error occurs. You can define the response status by the `success` property. The mechanism is implemented through the [axios](https://github.com/axios/axios) library (Promise based HTTP client for the browser and node.js).
 
-*Если браузер не поддерживает Promise, полифилл установится* **автоматически**
+*If your browser does not support the Promise, the polyfill will be installed* **automatically**. Let us consider an example.
 
 ``` javascript
 AWES.ajax({param1: 'param one', param2: 'param two'}, '/url-for-request', 'patch')
     .then( function(data) {
-        console.log(data.success); // true при успешном ответе, false при ошибке
+        console.log(data.success); // returns true if executed successfully or false in case of error
     })
 ```
 
-Третий параметр - это HTTP-метод отправки данных, он не обязательный и по-умолчанию равен `post`
+The third parameter of sending data is HTTP. It is not required and by default is equal to `post`.
 
-При отправке запроса, в глобальной шине вызываются обработкчики события `core:ajax` со значением 'true'. После ответа с сервера - со значением `false`. Эти события используются в компоненте для отображения индикатора загрузки. Событие при отправке вызывается с задержкой, которую можно настраивать в `AWES_CONFIG`. Если сервер не ответит втечение определенного времени, запрос вернет ошибку `TIMEOUT_ERROR`. Пример настройки
+When sending a request, the `core:ajax` event handlers with the value 'true' are called in the global bus. After response from the server the event handlers with the `false` value are called. These events are used in the component to display the loading indicator. When sending a request, an event is called with a delay which you can configure in `AWES_CONFIG`. If server doesn’t respond within a certain time, the request will return `TIMEOUT_ERROR`. Below is an example of how to configure a delay in `AWES_CONFIG`.
 
 ```javascript
 const AWES_CONFIG = {
@@ -174,18 +166,18 @@ const AWES_CONFIG = {
 }
 ```
 
-### Автоматические уведомления
+### Automatic notifications
 
-Если в ответе приходит поле `message`, оно автоматически отображается функцией [AWES.notify](#bjs-notify) со статусом `success` или `error`, в зависимости от ответа с сервера
+If you receive the `message` field in the response, it will be automatically displayed by the [AWES.notify](#bjs-notify) function with  the `success` or `error` status, depending on the server response.
 
-### Переадресация в ответе
+### Redirection in the response
 
-Если в ответе приходит поле `redirectUrl`, браузер перенаправляется на указанную страницу, при этом уведомления не выводятся
+If you receive the `redirectUrl` field in the response, the browser will be redirected to the specified page and the notifications will not be displayed in this step.
 
 
-## <a name="bjs-lang"></a> Языковые переменные
+## <a name="bjs-lang"></a> Language variables
 
-Чтобы изменить языковые переменные их необходимо переодределить в `AWES_CONFIG`:
+To change the language variables, override them in `AWES_CONFIG` as in the example below:
 
 ```javascript
 const AWES_CONFIG = {
@@ -196,9 +188,9 @@ const AWES_CONFIG = {
 }
 ```
 
-Получить все языковые переменные можно в глобальной переменной `AWES.lang`
+You can get all language variables in the `AWES.lang` global variable.
 
-Добавить новые переменные можно просто присвоив `AWES.lang` новое значение, при этом существующие переменные не переопределятся, а новые добавятся. Для примера выше:
+To add new variables, assign a new value to the `AWES.lang` variable. In this case the existing variables will not be overridden, but instead new variables will be added. For the example above:
 
 ```javascript
 AWES.lang = {
@@ -209,9 +201,9 @@ console.log(AWES.lang) // { TIMEOUT_ERROR: "Time is out...", NEW_VAR: "New varia
 ```
 
 
-## <a name="bjs-lang"></a> Уведомления
+## <a name="bjs-lang"></a> Notifications
 
-Для отображения уведомлений используется функция `AWES.notify`. Её можно переопределить, чтобы использовать сторонние библиотеки, однако стоит помнить что функции ядра передают только два параметра в уведомление:
+For displaying the notifications the `AWES.notify` function is used. It can be overridden in order to use third-party libraries. But you should note that the core functions pass only two parameters to the notification:
 
 ```javascript
 /**
