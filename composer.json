@@ -1,0 +1,55 @@
+{
+    "name": "awes/wiki",
+    "description": ":description",
+    "type": "library",
+    "license": "license",
+	"authors": [
+		{
+			"name": "Awescode GmbH",
+			"email": "info@awescode.de",
+			"homepage": "https://www.awescode.de",
+			"role": "Owner"
+		},
+		{
+			"name": "Ivan Slesarenko",
+			"email": "info@boomdraw.com",
+			"homepage": "https://boomdraw.com",
+            "role": "Developer"
+		}
+	],
+	"support": {
+		"email": "support@awescode.de"
+	},
+	"homepage": "http://gitlab.awescode.com/awes/wiki",
+	"keywords": ["Laravel", "Wiki"],
+    "require": {
+        "illuminate/support": "~5",
+        "awes-io/docs": "^0.1"
+    },
+    "require-dev": {
+		"phpunit/phpunit": "~7.0",
+        "mockery/mockery": "^1.1",
+        "orchestra/testbench": "~3.0",
+        "sempro/phpunit-pretty-print": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Awes\\Wiki\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Awes\\Wiki\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit --colors=always"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Awes\\Wiki\\WikiServiceProvider"
+            ]
+        }
+    }
+}
