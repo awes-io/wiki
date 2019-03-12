@@ -5,21 +5,21 @@ It can be located only within the &lt;form-builder&gt; component and is visually
 ![fb-multi-block](https://static.awes.io/docs/fb-multi-block.gif)
 
 ## Components
-* [General information](./form-builder.md)
-* [Auto Captcha](./auto-captcha.md)
-* [Checkbox](./checkbox.md)
-* [Company Slug](./company-slug.md)
-* [Editor](./editor.md)
-* [Input](./input.md)
-* **Multi Block**
-* [Phone](./phone.md)
-* [Radio Group](./radio-group.md)
-* [Select](./select.md)
-* [Slider](./slider.md)
-* [Switcher](./switcher.md)
-* [Textarea](./textarea.md)
-* [Uploader](./uploader.md)
-* [Validation Code](./code.md)
+* [Form Builder](./form-builder.md)
+* [Auto Captcha](./fb-auto-captcha.md)
+* [Checkbox](./fb-checkbox.md)
+* [Code](./fb-code.md)
+* [Company Slug](./fb-company-slug.md)
+* [Editor](./fb-editor.md)
+* [Input](./fb-input.md)
+* **Multi block**
+* [Phone](./fb-phone.md)
+* [Radio Group](./fb-radio-group.md)
+* [Select](./fb-select.md)
+* [Slider](./fb-slider.md)
+* [Switcher](./fb-switcher.md)
+* [Textarea](./fb-textarea.md)
+* [Uploader](./fb-uploader.md)
 
 ## Example
 
@@ -34,7 +34,7 @@ It can be located only within the &lt;form-builder&gt; component and is visually
         ]
     }"
 >
-    <template slot-scope="form">
+    <template slot-scope="fields">
         <fb-multi-block name="managers">
             <template slot-scope="block">
                 <fb-checkbox name="active" label="Active" :id="block.id"></fb-checkbox>
@@ -42,7 +42,7 @@ It can be located only within the &lt;form-builder&gt; component and is visually
                     name="manager"
                     label="Manager name"
                     :id="block.id"
-                    :disabled="! form.fields.managers[block.id].active"
+                    :disabled="! fields[`managers[${block.id}].active`]"
                 ></fb-input>
             </template>
         </fb-multi-block>
@@ -51,11 +51,11 @@ It can be located only within the &lt;form-builder&gt; component and is visually
 ```
 @vue
 <form-builder url="/api-url" :default="{ managers: [{active: true, manager: 'Manager 1'}, {active: true, manager: 'Manager 2'}, {active: false, manager: 'Manager 3'}] }">
-    <template slot-scope="form">
+    <template slot-scope="fields">
         <fb-multi-block name="managers">
             <template slot-scope="block">
                 <fb-checkbox name="active" label="Active" :id="block.id"></fb-checkbox>
-                <fb-input :disabled="! form.fields[`managers[${block.id}].active`]" name="manager" label="Manager name" :id="block.id"></fb-input>
+                <fb-input :disabled="! fields[`managers[${block.id}].active`]" name="manager" label="Manager name" :id="block.id"></fb-input>
             </template>
         </fb-multi-block>
     </template>
