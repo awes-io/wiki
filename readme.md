@@ -28,7 +28,7 @@ composer test
 
 ## Credits
 
-- [Awes.IO][https://www.awes.io]
+- [Awes.IO](https://www.awes.io)
 
 ## License
 
