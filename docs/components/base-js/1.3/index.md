@@ -1,9 +1,9 @@
-# JS-core package
+# Base JS
 
-The JS-core package is intended for downloading application components and their synchronization via the event bus.
+The package is intended for downloading application Vue.JS components and their synchronization via the event bus.
 
 
-## <a name="bjs-add"></a> JS-core installation
+## Installation
 
 To use the application, you should specify a project key in the `AWES_CONFIG.key` global variable. Below you can find an example of using such a key in your HTML document:
 
@@ -13,15 +13,15 @@ To use the application, you should specify a project key in the `AWES_CONFIG.key
     <head>
         <title>Document</title>
 
-        <!-- config (it should be defined before JS-core) -->
+        <!-- App Config  -->
         <script>
         const AWES_CONFIG = {
-            key: 'your_project_key_goes_here'
+            key: 'pkgkit.com project key'
         }
         </script>
 
         <!-- JS-core script -->
-        <script src="https://storage.awes.io/your_project_key_goes_here/awes-core/v0.x.x/js/main.js" async></script>
+        <script src="https://cdn.pkgkit.com/{pkgkit.com CDN key}/awes-io/base-js/v1.x.x/js/main.js"></script>
     </head>
     <body>
 
@@ -30,7 +30,7 @@ To use the application, you should specify a project key in the `AWES_CONFIG.key
 ```
 
 
-## <a name="bjs-plugin"></a> Example of using component
+## Component example
 
 ``` javascript
 // IIFE for the local visibility scope
@@ -73,7 +73,7 @@ To use the application, you should specify a project key in the `AWES_CONFIG.key
 })()
 ```
 
-### <a name="bjs-modules"></a> Installation of modules
+### Modules Installation
 
 For loading modules the [loadjs](https://github.com/muicss/loadjs) library is used. It is a tiny async loading library for modern browsers.
 
@@ -109,7 +109,7 @@ modules: {
 ```
 
 
-## <a name="bjs-event-bus"></a> Event bus
+## Event bus
 
 The event bus is used for modules interaction. It is accessible through the `AWES` global variable. The mechanism of the event bus work is based on the  [CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent) constructor. *If your browser does not support CustomEvent, the polyfill will be installed* **automatically**. Example of use:
 
@@ -139,7 +139,7 @@ AWES.emit('double', 123)
 ```
 
 
-## <a name="bjs-ajax"></a> AJAX request to the server
+## AJAX request to the server
 
 The `AWES.ajax` global method sends a request to the server and returns the Promise which may be used not only when a response is successful, but also when an error occurs. You can define the response status by the `success` property. The mechanism is implemented through the [axios](https://github.com/axios/axios) library (Promise based HTTP client for the browser and node.js).
 
@@ -175,7 +175,7 @@ If you receive the `message` field in the response, it will be automatically dis
 If you receive the `redirectUrl` field in the response, the browser will be redirected to the specified page and the notifications will not be displayed in this step.
 
 
-## <a name="bjs-lang"></a> Language variables
+## Language variables
 
 To change the language variables, override them in `AWES_CONFIG` as in the example below:
 
@@ -201,7 +201,7 @@ console.log(AWES.lang) // { TIMEOUT_ERROR: "Time is out...", NEW_VAR: "New varia
 ```
 
 
-## <a name="bjs-lang"></a> Notifications
+## Notifications
 
 For displaying the notifications the `AWES.notify` function is used. It can be overridden in order to use third-party libraries. But you should note that the core functions pass only two parameters to the notification:
 
