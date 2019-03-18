@@ -12,7 +12,7 @@ Below you can see a clear example of using such type of filter on your website.
 
 <h2 id="fw-example">Example of use</h2>
 
-The necessary fields are located within the component, they are exactly the same as in `&lt;form-builder&gt;`, only with one difference: the `name` property in the  parent elements defines the name of the GET parameter. 
+The necessary fields are located within the component, they are exactly the same as in `&lt;form-builder&gt;`, only with one difference: the `name` property in the  parent elements defines the name of the GET parameter.
 
 Here is the implementation of the <filter-wrapper> component:
 
@@ -49,10 +49,52 @@ The table below describes the Vue events called by the component.
 | **status-changed** | true/false     | The parameter in the address bar (don’t) match the fields in the filter |
 | **applied**        | `$route.query` | The “Apply” button is pressed                                    |
 | **reseted**        | `$route.query` | The “Reset” button is pressed                                     |
-| **canceled**       | event          | The “Cancel” button is pressed (only appears if there is a handler).   |
 
 The events such as **applied** and **reseted** return a new value of parameters in the address bar.
 
 *!! Please note that ALL parameters of the address bar are passed, and not only those specified in the filter fields !!*
 
 If there is no handler for the **canceled** event, the “Cancel” button will not be displayed.
+
+
+## Component slots
+
+### Middle button and after button
+
+A slot to append additional buttons
+
+```html
+<filter-wrapper>
+    <fb-input name="text" label="Text"></fb-input>
+
+    <template slot="buttons-middle">
+        <button>
+            Middle
+        </button>
+    </template>
+
+    <template slot="buttons-after">
+        <button>
+            After
+        </button>
+    </template>
+</filter-wrapper>
+```
+
+<div class="vue-example">
+    <filter-wrapper>
+        <fb-input name="text" label="Text"></fb-input>
+
+        <template slot="buttons-middle">
+            <button>
+                Middle
+            </button>
+        </template>
+
+        <template slot="buttons-after">
+            <button>
+                After
+            </button>
+        </template>
+    </filter-wrapper>
+</div>
