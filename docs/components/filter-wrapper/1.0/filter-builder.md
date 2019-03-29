@@ -21,7 +21,8 @@ Let’s learn more about this component.
 
 ## <a name="frb-options"></a> Component properties
 
-| Name           | Type      | Default       | Description                       |
-|----------------|:---------:|:-------------:|-----------------------------------|
-| **label (*)**  | `String`  | filter-${uid} | Text in the filter                |
-| **param**      | `Object`  | `Apply`       | Name and value of the GET parameter |
+| Name           | Type       | Default       | Description                         |
+|----------------|:----------:|:-------------:|-------------------------------------|
+| **label (*)**  | `String`   | filter-${uid} | Text in the filter                  |
+| **param**      | `Object`   | `{}`          | Name and value of the GET parameter |
+| **active**     | `Boolean`  | `false`       | Set param on component mount event  |
