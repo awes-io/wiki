@@ -12,8 +12,8 @@
   children:
     - name: "Base JS"
       link: "base-js"
-    - name: "Charts"
-      link: "charts"
+    - name: "Chart Builder"
+      link: "chart-builder"
     - name: "Context Menu"
       link: "context-menu"
     - name: "Filter Wrapper"
