@@ -2,6 +2,8 @@
 
 The package is intended for downloading application Vue.JS components and their synchronization via the event bus.
 
+Base.js loads Vue, Vuex and Vue Router asyncronously and creates a root Vue instance if it founds a tag with `id="awes-app"`
+
 
 ## Installation
 
