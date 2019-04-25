@@ -1,9 +1,15 @@
 {
-    "name": "awes/wiki",
-    "description": ":description",
+    "name": "awes-io/wiki",
+    "description": "This is the source for the https://www.awes.io/documentation/",
     "type": "library",
-    "license": "license",
+    "license": "MIT",
 	"authors": [
+        {
+          "name": "Awes.io",
+          "email": "contact@awes.io",
+          "homepage": "https://www.awes.io",
+          "role": "Maintainer"
+        },
 		{
 			"name": "Awescode GmbH",
 			"email": "info@awescode.de",
@@ -18,10 +24,10 @@
 		}
 	],
 	"support": {
-		"email": "support@awescode.de"
+		"email": "contact@awes.io","
 	},
 	"homepage": "http://gitlab.awescode.com/awes/wiki",
-	"keywords": ["Laravel", "Wiki"],
+	"keywords": ["Awes.io", "Wiki", "awes-io", "awesdotio", "Documentation", "Guides"],
     "require": {
         "illuminate/support": "~5",
         "awes-io/docs": "^0.1"
