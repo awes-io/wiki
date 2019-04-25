@@ -1,28 +1,48 @@
-<p align="center"><a href="https://www.awes.io/?utm_source=github&utm_medium=wiki" target="_blank" rel="noopener noreferrer"><img width="100" src="https://static.awes.io/promo/Logo_sign_color.svg" alt="Vue logo"></a></p>
+<p align="center">
+    <a href="https://www.awes.io/?utm_source=github&utm_medium=wiki" target="_blank" rel="noopener noreferrer">
+        <img width="100" src="https://static.awes.io/promo/Logo_sign_color.svg" alt="Awes.io logo">
+    </a>
+</p>
 
 <p align="center">
-
-[![Composer Ready](https://www.pkgkit.com/4GBWO/awes/wiki/status.svg)](https://www.awes.io/?utm_source=github&utm_medium=shields)
-[![Last version](https://www.pkgkit.com/4GBWO/awes/wiki/version.svg)](https://www.awes.io/?utm_source=github&utm_medium=shields) 
-[![Downloads](https://www.pkgkit.com/4GBWO/awes/wiki/downloads.svg)](https://www.awes.io/?utm_source=github&utm_medium=shields)
-[![License](https://img.shields.io/github/license/awes-io/wiki.svg)](https://www.awes.io/?utm_source=github&utm_medium=shields)
-[![Last commit](https://img.shields.io/github/last-commit/awes-io/wiki.svg)](https://www.awes.io/?utm_source=github&utm_medium=shields)
-[![Hosted by Package Kit](https://www.pkgkit.com/badges/hosted.svg)](https://www.pkgkit.com?utm_source=github&utm_medium=shields)
-[![Twitter](https://img.shields.io/twitter/url/https/awesdotio.svg)](https://twitter.com/awesdotio)
-[![Analytics](https://ga-beacon.appspot.com/UA-134431636-1/awes-io/wiki)](https://github.com/awes-io/wiki)
+    <a href="https://www.awes.io/?utm_source=github&amp;utm_medium=shields">
+        <img src="https://www.pkgkit.com/4GBWO/awes/wiki/status.svg" alt="Composer Ready" />
+    </a>
+    <a href="https://www.awes.io/?utm_source=github&amp;utm_medium=shields">
+        <img src="https://www.pkgkit.com/4GBWO/awes/wiki/version.svg" alt="Last version" />
+    </a> 
+    <a href="https://www.awes.io/?utm_source=github&amp;utm_medium=shields">
+        <img src="https://www.pkgkit.com/4GBWO/awes/wiki/downloads.svg" alt="Downloads" />
+    </a>
+    <a href="https://www.awes.io/?utm_source=github&amp;utm_medium=shields">
+        <img src="https://img.shields.io/github/license/awes-io/wiki.svg" alt="License" />
+    </a>
+    <a href="https://www.awes.io/?utm_source=github&amp;utm_medium=shields">
+        <img src="https://img.shields.io/github/last-commit/awes-io/wiki.svg" alt="Last commit" />
+    </a>
+    <a href="https://www.pkgkit.com/?utm_source=github&amp;utm_medium=shields">
+        <img src="https://www.pkgkit.com/badges/hosted.svg" alt="Hosted by Package Kit" />
+    </a>
+    <a href="https://twitter.com/awesdotio">
+        <img src="https://img.shields.io/twitter/url/https/awesdotio.svg" alt="Twitter" />
+    </a>
+    <a href="https://github.com/awes-io/wiki">
+        <img src="https://ga-beacon.appspot.com/UA-134431636-1/awes-io/wiki" alt="Analytics" />
+    </a>
+    <a href="https://www.patreon.com/awesdotio">
+        <img src="https://img.shields.io/badge/%24-donate-ff69b4.svg" alt="donate">
+    </a>
 </p>
 
 <h1 align="center">Awes.io Wiki</h1>
 
-<p align="center">
-
-This is the source for the [Awes.io Guides](https://www.awes.io/documentation/?utm_source=github&utm_medium=wiki).
-</p>
-
+<p align="center">This is the source for the <a href="https://www.awes.io/documentation/?utm_source=github&amp;utm_medium=wiki">Awes.io Guides</a>.</p>
 
 
 <p align="center">
-<a href="https://www.patreon.com/awesdotio" target="_blank"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patreon"></a>
+    <a href="https://www.patreon.com/awesdotio" target="_blank">
+        <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patreon">
+    </a>
 </p>
 
 ## 
