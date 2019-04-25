@@ -43,6 +43,7 @@ This component is intended for displaying dynamic templates. The change of data 
 | `store-data`    | **String**    | `'content-wrapper-${i}`  | Identifier in Vuex store  |
 | `tag`           | **String**    | `'div'`      | Tag for the template wrapper                  |
 | `url`           | **String**    | `undefined`  | Recive or update data with GET-request. Will not fetch data on initial render, if the `default` prop is provided, |
+| `check-empty`   | **Function**  | `AWES.utils.object.isEmpty` | Function to validate if the data is empty |
 
 
 ## Lazy components
