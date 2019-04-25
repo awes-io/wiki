@@ -28,7 +28,10 @@ It is a component of dynamic tables. It uses the global `Vuex` store. Below you 
 |--------------------|:---------------:|:-----------------:|----------------------------------------------|
 | **store-data (*)** | `String`        | `undefined`       | Data identifier in the store                 |
 | **default**        | `Array, Object` | `undefined`       | Data for displaying                          |
+| **list-class**     | `String`        | `int-table__list` | CSS class for wrapper, while rendering table as a list |
+| **list-row-class** | `String`        | `int-table__list-row` | CSS class for row, while rendering table as a list |
 | **row-url**        | `String`        | `undefined`       | Address for transition when clicking on a row. It could be a template like `http://some.url/{id}`, where `id` will be replaced with the id variable from row data, thus every row may have it's own url to redirect |
+| **row-click**      | `Function`      | redirect to row-url| By default, click on a table row redirects window to url, provided in 'row-url' prop. You may overwrite this behaviour. In this function `this` refers to `window` |
 | **media-queries**  | `Object`        | `<MQDefault>`     | Object of media expressions for displaying cells |
 
 ```javascript
@@ -76,20 +79,20 @@ const AWES_CONFIG = {
 </table-builder>
 </div>
 
-Also, when data are not available, the component gets the CSS class `.is-empty`
+Also, when data are not available, the component receives a CSS class `.is-empty`
 
 ### Loading state
 
 ```html
 <table-builder store-data="table-empty">
-    <div slot="loader">
+    <div slot="loading">
         <i class="icon icon-spinner"></i>
         Loading...
     </div>
 </table-builder>
 ```
 
-Also, when the data are loading, the component gets the CSS class `.is-loading`
+Also, when the data are loading, the component receives a CSS class `.is-loading`
 
 
 ### Default slot
@@ -104,7 +107,7 @@ By default, the slot only accepts the [&lt;tb-column&gt;](./tb-column.md) compon
     ]"
     store-data="no-pagination"
 >
-    <!-- Everything, except <tb-column>, will be skipped  -->
+    <!-- Everything, except <tb-column>, will be skipped -->
     <h2>Will not render</h2>
 
     <!-- The content of the transferred data will be displayed by the column name -->
