@@ -1,4 +1,4 @@
-# AWES Notify container
+# System Notify container
 
 A container where notifications will appear. One container, called `default` is registered automatically. Other containers may be added if you need.
 
@@ -27,7 +27,8 @@ To create a custom default container, insert an element with your config
 |-------------|:-----------------:|:-----------:|-------------|
 | **name(*)** | `String`          | `undefined` | Container identifier. Used to route natification appearance. Be aware of name collisions, it's not managed automatically. Or you can use it show notification in more than one place. |
 | **stack**   | `String, Boolean` | `'bottom'`  | One of `'top'`, `'bottom'`, `'false' or false`. Position of new notify in stack or no stack, but one notify layout |
-| **config**   | `Object`   | `undefined` | Overrides for defaults, provided in `AWES_CONFIG.notify` |
+| **config**   | `Object`         | `undefined` | Overrides for defaults, provided in `AWES_CONFIG.notify` |
+| **notify**   | `Object, Array`  | `undefined` | Sets initial notify (or an array of notifies) after component is mounted into the DOM, see [system-notify](./system-notify.md) for object schema |
 
 
 ## Positioning
