@@ -23,14 +23,8 @@
     <a href="https://www.pkgkit.com/?utm_source=github&amp;utm_medium=shields">
         <img src="https://www.pkgkit.com/badges/hosted.svg" alt="Hosted by Package Kit" />
     </a>
-    <a href="https://twitter.com/awesdotio">
-        <img src="https://img.shields.io/twitter/url/https/awesdotio.svg" alt="Twitter" />
-    </a>
     <a href="https://github.com/awes-io/wiki">
         <img src="https://ga-beacon.appspot.com/UA-134431636-1/awes-io/wiki" alt="Analytics" />
-    </a>
-    <a href="https://www.patreon.com/awesdotio">
-        <img src="https://img.shields.io/badge/%24-donate-ff69b4.svg" alt="donate">
     </a>
 </p>
 
