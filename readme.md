@@ -61,7 +61,7 @@ Follow to [Documentation](https://www.awes.io/documentation/?utm_source=github&u
 Via Composer
 
 ``` bash
-$ composer require awes/wiki
+$ composer require awes-io/wiki
 ```
 The package will automatically put docs path to `config('docs.path')`
 
