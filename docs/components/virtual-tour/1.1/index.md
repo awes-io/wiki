@@ -73,3 +73,16 @@ For local change, pass an object to the tour component directly. The string, tha
     }"
 ></virtual-tour>
 ```
+
+## Cookie domain
+
+To set cookie for specific domains, provide a config option:
+
+```javascript
+const AWES_CONFIG = {
+    key: 'your_api_key',
+    virtualTour: {
+        cookieDomain: '.website.com'
+    }
+}
+```
