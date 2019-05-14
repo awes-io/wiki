@@ -1,7 +1,7 @@
 # Introduction
 
 <p align="center">
-  <img src="https://www.awes.io/images/platform/3.svg" width="33%" />
+  <img src="https://static.awes.io/promo/illustration_1440x1030_transparent_black.png" width="33%" />
 </p>
 
 
