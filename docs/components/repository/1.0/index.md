@@ -2,6 +2,55 @@
 
 Repository pattern implementation for Laravel based apps.
 
+### Package allows you to filter data based on incoming request parameters:
+
+```
+https://example.com/news?title=Title&custom=value&orderBy=name_desc
+```
+
+It will automatically apply built-in constraints onto the query as well as any custom scopes and criteria you need:
+
+```php
+protected $searchable = [
+    // where 'title' equals 'Title'
+    'title',
+];
+
+protected $scopes = [
+    // and custom parameter used in your scope
+    'custom' => MyScope::class,
+];
+```
+
+```php
+class MyScope extends ScopeAbstract
+{
+    public function scope($builder, $value, $scope)
+    {
+        return $builder->where($scope, $value)->orWhere(...);
+    }
+}
+```
+
+Ordering by any field is available:
+
+```php
+protected $scopes = [
+    // orderBy field
+    'orderBy' => OrderByScope::class,
+```
+
+Package can also apply any custom criteria:
+
+```php
+return $this->news->withCriteria([
+    new MyCriteria([
+        'category_id' => '1', 'name' => 'Name'
+    ])
+    ...
+])->get();
+```
+
 ## Installation
 
 Via Composer
@@ -51,7 +100,7 @@ class News extends Model
 
 ### Create a Repository
 
-Extend it from AwesIO\Repository\Eloquent\BaseRepository and provide entity() method to return full model class name:
+Extend it from `AwesIO\Repository\Eloquent\BaseRepository` and provide `entity()` method to return full model class name:
 
 ```php
 namespace App;
@@ -67,7 +116,7 @@ class NewsRepository extends BaseRepository
 }
 ```
 
-### Usage
+### Use built-in methods
 
 ```php
 use App\NewsRepository;
@@ -174,6 +223,12 @@ Find model or throw an exception if not found:
 $this->news->findOrFail($id);
 ```
 
+Execute the query and get the first result or throw an exception:
+
+```php
+$this->news->firstOrFail();
+```
+
 ### Create a Criteria
 
 Criteria are a way to build up specific query conditions.
@@ -229,7 +284,7 @@ class NewsController extends BaseController
 
 ### Scope, filter and order by request parameters.
 
-In your repository define which fields can be used to scope your queries by setting **$searchable** property.
+In your repository define which fields can be used to scope your queries by setting `$searchable` property.
 
 ```php
 protected $searchable = [
@@ -274,20 +329,19 @@ protected $scopes = [
 $this->news->scope($request)->get();
 ```
 
-Enable ordering for specific fields by adding **$orderable** property to your model class:
+Enable ordering for specific fields by adding `$orderable` property to your model class:
 
 ```php
 public $orderable = ['email'];
 ```
 
-
 ```
 https://example.com/news?orderBy=email_desc&begin=2019-01-24&end=2019-01-26
 ```
 
-**orderBy=email_desc** will order by email in descending order, **orderBy=email** - in ascending
+`orderBy=email_desc` will order by email in descending order, `orderBy=email` - in ascending
 
-You can also build your own custom scopes. In your repository override **scope()** method:
+You can also build your own custom scopes. In your repository override `scope()` method:
 
 ```php
 public function scope($request)
@@ -302,7 +356,7 @@ public function scope($request)
 }
 ```
 
-Create your **scopes** class and extend **ScopesAbstract**:
+Create your `scopes` class and extend `ScopesAbstract`
 
 ```php
 use AwesIO\Repository\Scopes\ScopesAbstract;
