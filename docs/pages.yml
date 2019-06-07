@@ -10,6 +10,8 @@
 - name: "Components"
   slug: "components"
   children:
+    - name: "Auth"
+      link: "auth"
     - name: "Base JS"
       link: "base-js"
     - name: "Chart Builder"
