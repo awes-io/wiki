@@ -2,7 +2,10 @@
   link: ""
   
 - name: "Quick Start"
-  link: "quick-start"    
+  link: "quick-start" 
+
+- name: "Guide"
+  link: "guide"    
     
 - name: "Customization"
   link: "customization"
