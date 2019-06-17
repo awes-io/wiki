@@ -288,8 +288,229 @@ It's that easy, more info on filtering can be found in [awes-io/repository docum
 
 We've updated the existing filter, but what if we want to build a custom filter of some kind for our lead management UI?
 
+We have the option to search leads by their names, but the filter doesn't work, let's fix this:
+
+<img src="https://static.awes.io/docs/guide/08_filter_by_name_not_working.png" alt="Awes.io">
+
+All we need to do is to add `name` parameter to `$searchable` property in `App\Sections\Leads\Repositories\LeadRepository` and in this case we need to use `like` operator:
+
+```php
+protected $searchable = [
+    'status',
+    'name' => 'like'
+];
+```
+
+<img src="https://static.awes.io/docs/guide/09_filter_by_name.png" alt="Awes.io">
+
+Now let's add a new filtering option by status. Firstly we need to set up an additional input field in `resources/views/sections/leads/index.blade.php` template:
+
+```html
+<fb-input name="name" label="{{ _p('pages.leads.filter.name', 'Name') }}"></fb-input>
+<fb-input name="status" label="{{ _p('pages.leads.filter.status', 'Status') }}"></fb-input>
+```
+
+<img src="https://static.awes.io/docs/guide/10_filter_by_status_input.png" alt="Awes.io">
+
+And because we're tracking changes in `status` parameter already:
+
+```php
+'scope_api_params' => ['orderBy', 'is_public', 'name', 'status'],
+```
+
+and we've added it to repository `searchable` property earlier:
+
+```php
+protected $searchable = [
+    'status',
+    'name' => 'like'
+];
+```
+
+Everything should work as intended:
+
+<img src="https://static.awes.io/docs/guide/11_filter_by_status_results.png" alt="Awes.io">
+
 ## New sorting
 
-## Customizing table
+What about sorting? We have an option to sort leads by names, let's make it work. Again all we need to do is to add `name` parameter to model's `$orderable` property and repository package will do the rest:
 
-## Creating and updating leads
+```php
+// App\Sections\Leads\Models\Lead
+public $orderable = ['name'];
+```
+
+Now let's add sorting by a lead status right into a table column. Firstly update `index` template:
+
+```html
+<!-- <tb-column name="status" label="{{ _p('pages.leads.table.col.status', 'Status') }}"></tb-column> -->
+<tb-column name="status" label="{{ _p('pages.leads.table.col.status', 'Status') }}" sort></tb-column>
+```
+
+as you can see we've added `sort` property to a respective table column, this will enable sorting controls:
+
+<img src="https://static.awes.io/docs/guide/12_column_sorting_controls.png" alt="Awes.io">
+
+To make them work. we need to add `status` parameter to `$orderable` model property:
+
+```php
+public $orderable = ['name', 'status'];
+```
+
+That's it, it just works:
+
+<img src="https://static.awes.io/docs/guide/13_column_sorting_results.png" alt="Awes.io">
+
+If you want to add a new sorting option to `Sort by` drop-down menu, it's very simple:
+
+```html
+...
+<cm-query :param="{orderBy: 'name_desc'}">{{ _p('pages.leads.filter.name', 'Name') }} &uarr;</cm-query>
+<cm-query :param="{orderBy: 'status'}">{{ _p('pages.leads.filter.status', 'Status') }} &darr;</cm-query>
+<cm-query :param="{orderBy: 'status_desc'}">{{ _p('pages.leads.filter.status', 'Status') }} &uarr;</cm-query>
+...
+```
+
+<img src="https://static.awes.io/docs/guide/14_sort_by_status.png" alt="Awes.io">
+
+## Creating new leads
+
+What if we need to create a new record? If you click the yellow action button, a new modal window will open, let's update it so we can create new leads.
+
+For now, all we have is one input field for a name. Let's add one more for status:
+
+```html
+<!-- index.blade.php -->
+<form-builder url="" :disabled-dialog="true">
+    <fb-input name="name" label="{{ _p('pages.leads.modal_add.name', 'Name') }}"></fb-input>
+    <fb-input name="status" label="{{ _p('pages.leads.modal_add.status', 'Status') }}"></fb-input>
+</form-builder>
+```
+
+<img src="https://static.awes.io/docs/guide/15_create_lead_modal_window.png" alt="Awes.io">
+
+And add a new route, to store data:
+
+```html
+<!-- <form-builder url="" :disabled-dialog="true"> -->
+<form-builder url="{{ route('leads.store') }}" :disabled-dialog="true">
+```
+
+Of course, we need to add a new route to `web.php` file:
+
+```php
+Route::namespace('\App\Sections\Leads\Controllers')->prefix('leads')->group(function () {
+    ...
+    Route::post('/', 'LeadController@store')->name('leads.store');
+});
+```
+
+Respective method to `LeadController` (we'll keep things as simple as possible for easy understanding):
+
+```php
+public function store(Request $request)
+{
+    $this->leads->create($request->all());
+}
+```
+
+And column names into `$fillable` model's property:
+
+```php
+public $fillable = ['name', 'status'];
+```
+
+We can now create new leads, but it'd be really helpful if the table could refresh its content after that. To achieve that, we need to handle a successful response after creating a new record:
+
+```html
+<!-- <form-builder url="{{ route('leads.store') }}" :disabled-dialog="true"> -->
+<form-builder url="{{ route('leads.store') }}" :disabled-dialog="true" @sended="AWES.emit('content::leads:update')">
+```
+
+All we do here is emiting event, now table will refresh after successfully creating a new record.
+
+## Customizing table & updating existing leads
+
+At last, we want to implement something fun and really useful. How about modifying our table and creating a new modal window to update any of our leads data.
+
+Let's add new menu to each table row, with `edit lead` item:
+
+```html
+...
+<tb-column name="status" label="{{ _p('pages.leads.table.col.status', 'Status') }}" sort></tb-column>
+<tb-column name="">
+    <template slot-scope="d">
+        <context-menu right boundary="table">
+            <cm-button @click="AWES._store.commit('setData', {param: 'editLead', data: d.data}); AWES.emit('modal::edit-lead:open')">
+                {{ _p('pages.leads.table.options.edit', 'Edit') }}
+            </cm-button>
+        </context-menu>
+    </template>
+</tb-column>
+```
+
+<img src="https://static.awes.io/docs/guide/16_edit_lead_menu.png" alt="Awes.io">
+
+And new modal window:
+
+```html
+<modal-window name="edit-lead" class="modal_formbuilder" title="{{ _p('pages.leads.modal.edit_lead.title', 'Edit lead') }}">
+    <form-builder method="PATCH" url="/leads/{id}" store-data="editLead" @sended="AWES.emit('content::leads:update')">
+        <fb-input name="name" label="{{ _p('pages.leads.modal_add.name', 'Name') }}"></fb-input>
+        <fb-input name="status" label="{{ _p('pages.leads.modal_add.status', 'Status') }}"></fb-input>
+    </form-builder>
+</modal-window>
+```
+
+Now if we click on the 'Edit' menu item in any table row, modal window with respective data will open:
+
+<img src="https://static.awes.io/docs/guide/17_edit_lead_modal_window.png" alt="Awes.io">
+
+It remains only to add a new `update` method to the controller and new `PATCH` route:
+
+```php
+public function update(Request $request, $id)
+{
+    $this->leads->update($request->all(), $id);
+}
+```
+
+```php
+Route::namespace('\App\Sections\Leads\Controllers')->prefix('leads')->group(function () {
+    ...
+    Route::patch('/{id}', 'LeadController@update')->name('leads.update');
+});
+```
+
+# Additional features
+
+Just to make things even more interesting, let's update our project with some easy-to-use features available in Awes.io platform out-of-box.
+
+## Validation errors
+
+It's always helpful to display user any validation errors if any does occur. This functionality is also supported by our platform.
+
+Let's create a form request class using Artisan command:
+
+```bash
+php artisan make:request '\App\Sections\Leads\Requests\StoreLead'
+```
+
+And add some basic validation rules into it:
+
+```php
+return [
+    'name' => 'required|string|max:255',
+    'status' => 'required|string|max:255',
+];
+```
+
+That's all, now any validation errors will be displayed.
+
+## Custom filters 
+
+<!-- Building custom scope for searching in several fields. -->
+
+## Notifications
+
+<!-- success notification after new lead creation-->
