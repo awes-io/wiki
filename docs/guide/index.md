@@ -142,7 +142,7 @@ The second argument is a default value, which will be added to the localization 
 
 Further in the template we can see `create_button` section, which determines how "floating" action button looks like:
 
-```php
+```html
 @section('create_button')
     <button class="frame__header-add" @click="AWES.emit('modal::leads.open')"><i class="icon icon-plus"></i></button>
 @endsection
@@ -158,9 +158,9 @@ Next goes `group filter` component:
 
 If we click on one of the filters, we'll see that it modifies `is_public` URL's parameter to respective value. Our component will track these changes and send server requests to get filtered data. We will return to this topic when we'll create additional filters ourselves.
 
-After filters, we can see one more very powerful component - context menu, which in this case, controls ordering our leads by their names. 
+After filters, we can see one more very useful component - context menu, which in this case, controls ordering our leads by their names. 
 
-```php
+```html
 <context-menu button-class="filter__slink" right>
     <template slot="toggler">
         <span>{{  _p('pages.filter.sort_by', 'Sort by') }}</span>
@@ -174,7 +174,7 @@ Sorting is another topic we'll analyze in the future, when we'll build our custo
 
 Next is the button to open main filters panel, for now, it only displays one parameter, but we'll add more, later:
 
-```php
+```html
 <button class="filter__slink" @click="$refs.filter.toggle()">
     <i class="icon icon-filter" v-if="">
         <span class="icn-dot" v-if="$awesFilters.state.active['leads']"></span>
@@ -193,3 +193,103 @@ Next is the button to open main filters panel, for now, it only displays one par
 </slide-up-down>
 ```
 <img src="https://static.awes.io/docs/guide/03_main_filters.png" alt="Awes.io">
+
+Next, we see the usage of one of our most powerful component - Table Builder, which powers `@table` blade component for easy interactive tables set up:
+
+```php
+@table([
+    'name' => 'leads',
+    'row_url' => route('leads.index') . '/{id}',
+    'scope_api_url' => route('leads.scope'),
+    'scope_api_params' => ['orderBy', 'is_public', 'name'],
+    'default_data' => $leads
+])
+...
+```
+
+And the last one is the modal window with leads creation form:
+
+```html
+<modal-window name="leads" class="modal_formbuilder" title="Create">
+    <form-builder url="" :disabled-dialog="true">
+        <fb-input name="name" label="{{ _p('pages.leads.modal_add.name', 'Name') }}"></fb-input>
+    </form-builder>
+</modal-window>
+```
+
+We'll inspect Modal Window and Form Builder components in greater detail later when we'll update our current project.
+
+# Let's build something new
+
+We got a closer look at the general structure of a generated section. It's time to build something new and get into the platform's details.
+
+## Improving existing filters
+
+Let's go back to our group filter and update it to display leads with different statuses.
+
+Firstly we need to create new migration and add the `status` column to our `leads` table:
+
+```php
+// database/migrations/XXXX_XX_XX_XXXXXX_add_status_to_leads_table.php
+...
+Schema::table('leads', function (Blueprint $table) {
+    $table->string('status');
+});
+...
+```
+After migrating, let's add directly to database table couple records with statuses `new` and `closed`:
+
+<img src="https://static.awes.io/docs/guide/04_leads_with_statuses.png" alt="Awes.io">
+
+Now if we refresh `/leads` page, we'll see that we need to add a new column to the table in order to see which status lead currently has:
+
+<img src="https://static.awes.io/docs/guide/05_leads_without_statuses_table.png" alt="Awes.io">
+
+It's time to slightly dive into `table-builder` package functionality. Firstly let's add new `status` column:
+
+```html
+<tb-column name="name" label="{{ _p('pages.leads.table.col.name', 'Name') }}"></tb-column>
+<tb-column name="status" label="{{ _p('pages.leads.table.col.status', 'Status') }}"></tb-column>
+```
+
+As you can see, we added a new `tb-column` tag. `Name` parameter is a key in the data object, which is just our `status` column name. And we're passing new language string to a label property, as we discussed earlier.
+
+Now if we refresh lead's page, we'll see their statuses:
+
+<img src="https://static.awes.io/docs/guide/06_leads_with_statuses_table.png" alt="Awes.io">
+
+Let's go back to the group filter and slightly edit it to retrieve records by status:
+
+```php
+// @filtergroup(['filter' => ['' => 'All', '1' => 'Public', '0' => 'Private'], 'variable' => 'is_public'])
+@filtergroup(['filter' => ['' => 'All', 'new' => 'New', 'closed' => 'Closed'], 'variable' => 'status'])
+```
+
+Normally we'd have to implement some filtering logic, but thanks to `awes-io/repository` package, all we need to do is to add `status` parameter to `searchable` property in `App\Sections\Leads\Repositories\LeadRepository`:
+
+```php
+protected $searchable = ['status'];
+```
+
+and add `status` to `@table`'s `scope_api_params` property (this will allow the component to track any changes in parameter value and handle them respectively):
+
+```php
+// 'scope_api_params' => ['orderBy', 'is_public', 'name'],
+'scope_api_params' => ['orderBy', 'is_public', 'name', 'status'],
+```
+
+now if we click on filter option, request with `status` parameter will be sent to the server and `repository` package will filter data and return it for `table-builder` to render:
+
+<img src="https://static.awes.io/docs/guide/07_group_filter_by_status.png" alt="Awes.io">
+
+It's that easy, more info on filtering can be found in [awes-io/repository documentation](https://github.com/awes-io/repository).
+
+## Implementing new filters
+
+We've updated the existing filter, but what if we want to build a custom filter of some kind for our lead management UI?
+
+## New sorting
+
+## Customizing table
+
+## Creating and updating leads
