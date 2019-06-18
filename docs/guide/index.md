@@ -121,7 +121,7 @@ Next, there are meta title and description sections:
 @section('meta_description', _p('pages.leads.meta_description', 'meta_description'))
 ```
 
-Here we can once more see how `_p()` helper localization function is used. The first argument is the file.key string, if we open newly created `resources/lang/en/pages.php` file it'll contain different translation strings:
+Here we can once more see how `_p()` helper localization function is used. The first argument is the `file.key` string, if we open newly created `resources/lang/en/pages.php` file it'll contain different translation strings:
 
 ```php
 <?php
@@ -136,9 +136,9 @@ return [
 ];
 ```
 
-The second argument is a default value, which will be added to the localization file if key doesn't exist. Thus, by the time the interface build process is completed, you will have a complete base language file, ready for translation.
+The second argument is a default value, which will be added to the localization file if key doesn't exist. Thus, by the time the interface build process is completed, you'll have full base language file, ready for translation.
 
-Further in the template we can see `create_button` section, which determines how "floating" action button looks like:
+Further, in the template, we can see `create_button` section, which determines how the "floating" action button looks and behaves like:
 
 ```html
 @section('create_button')
@@ -146,7 +146,7 @@ Further in the template we can see `create_button` section, which determines how
 @endsection
 ```
 
-Next goes `group filter` component:
+For now, just ignore `@click` code, we'll explain it later. Next goes `group filter` component:
 
 ```php
 @filtergroup(['filter' => ['' => 'All', '1' => 'Public', '0' => 'Private'], 'variable' => 'is_public'])
@@ -154,9 +154,9 @@ Next goes `group filter` component:
 
 <img src="https://static.awes.io/docs/guide/02_filter_group_component.png" alt="Awes.io">
 
-If we click on one of the filters, we'll see that it modifies `is_public` URL's parameter to respective value. Our component will track these changes and send server requests to get filtered data. We will return to this topic when we'll create additional filters ourselves.
+If we click on one of the filters, we'll see that it modifies `is_public` URL's parameter to respective value. Our component tracks these changes and sends server requests to get filtered data. We return to this topic later when will be creating additional filters ourselves.
 
-After filters, we can see one more very useful component - context menu, which in this case, controls ordering our leads by their names. 
+Moving on, we can see one more very useful component - `context menu`, which in this case, controls the ordering of our leads by their names. 
 
 ```html
 <context-menu button-class="filter__slink" right>
@@ -168,7 +168,7 @@ After filters, we can see one more very useful component - context menu, which i
 </context-menu>
 ```
 
-Sorting is another topic we'll analyze in the future, when we'll build our custom filters based on repositories.
+Sorting is another topic we'll analyze in the future when we build our custom filters based on repositories.
 
 Next is the button to open main filters panel, for now, it only displays one parameter, but we'll add more, later:
 
@@ -190,9 +190,9 @@ Next is the button to open main filters panel, for now, it only displays one par
     </filter-wrapper>
 </slide-up-down>
 ```
-<img src="https://static.awes.io/docs/guide/03_main_filters.png" alt="Awes.io">
+<img src="https://static.awes.io/docs/guide/03_main_filters.png" alt="Awes.io" class="mb-20">
 
-Next, we see the usage of one of our most powerful component - Table Builder, which powers `@table` blade component for easy interactive tables set up:
+Further, we see the usage of one of our most powerful component - [Table Builder](https://github.com/awes-io/table-builder), which powers `@table` blade component for easy interactive tables set up:
 
 ```php
 @table([
@@ -205,7 +205,7 @@ Next, we see the usage of one of our most powerful component - Table Builder, wh
 ...
 ```
 
-And the last one is the modal window with leads creation form:
+And the last one is the `modal window` with leads creation form:
 
 ```html
 <modal-window name="leads" class="modal_formbuilder" title="Create">
@@ -215,7 +215,7 @@ And the last one is the modal window with leads creation form:
 </modal-window>
 ```
 
-We'll inspect Modal Window and Form Builder components in greater detail later when we'll update our current project.
+We'll inspect `Modal Window` and [Form Builder](https://github.com/awes-io/form-builder) components later in greater detail when we update our current project.
 
 # Let's build something new
 
@@ -223,9 +223,7 @@ We got a closer look at the general structure of a generated section. It's time 
 
 ## Improving existing filters
 
-Let's go back to our group filter and update it to display leads with different statuses.
-
-Firstly we need to create new migration and add the `status` column to our `leads` table:
+Let's go back to our group filter and update it to display leads with different statuses. Firstly we need to create new migration and add the `status` column to our `leads` table:
 
 ```php
 // database/migrations/XXXX_XX_XX_XXXXXX_add_status_to_leads_table.php
@@ -235,24 +233,22 @@ Schema::table('leads', function (Blueprint $table) {
 });
 ...
 ```
-After migrating, let's add directly to database table couple records with statuses `new` and `closed`:
+After migrating, let's add a couple of records with statuses `new` and `closed`, directly to a database table:
 
-<img src="https://static.awes.io/docs/guide/04_leads_with_statuses.png" alt="Awes.io">
+<img src="https://static.awes.io/docs/guide/04_leads_with_statuses.png" class="mb-20" alt="Awes.io">
 
-Now if we refresh `/leads` page, we'll see that we need to add a new column to the table in order to see which status lead currently has:
+Now if we refresh `/leads` page, we'll discover that we also need to add a new column to the UI table in order to see which status each record currently have:
 
 <img src="https://static.awes.io/docs/guide/05_leads_without_statuses_table.png" alt="Awes.io">
 
-It's time to slightly dive into `table-builder` package functionality. Firstly let's add new `status` column:
+It's time to slightly dive into `table-builder` component's functionality. Firstly let's add a new `status` column:
 
 ```html
 <tb-column name="name" label="{{ _p('pages.leads.table.col.name', 'Name') }}"></tb-column>
 <tb-column name="status" label="{{ _p('pages.leads.table.col.status', 'Status') }}"></tb-column>
 ```
 
-As you can see, we added a new `tb-column` tag. `Name` parameter is a key in the data object, which is just our `status` column name. And we're passing new language string to a label property, as we discussed earlier.
-
-Now if we refresh lead's page, we'll see their statuses:
+As you can see, we added a new `tb-column` tag. `Name` parameter is a key in the data object, which is just our `status` field name. And we're also passing new language string to a `label` property, as we've discussed earlier. Now if we refresh lead's page, we'll see their statuses:
 
 <img src="https://static.awes.io/docs/guide/06_leads_with_statuses_table.png" alt="Awes.io">
 
@@ -269,11 +265,13 @@ Normally we'd have to implement some filtering logic, but thanks to `awes-io/rep
 protected $searchable = ['status'];
 ```
 
-and add `status` to `@table`'s `scope_api_params` property (this will allow the component to track any changes in parameter value and handle them respectively):
+and add `status` to `@table`'s `scope_api_params` property (this will allow the component to track any changes in the parameter's value and handle them respectively):
 
 ```php
-// 'scope_api_params' => ['orderBy', 'is_public', 'name'],
-'scope_api_params' => ['orderBy', 'is_public', 'name', 'status'],
+@table([
+    ...
+    // 'scope_api_params' => ['orderBy', 'is_public', 'name'],
+    'scope_api_params' => ['orderBy', 'is_public', 'name', 'status'],
 ```
 
 now if we click on filter option, request with `status` parameter will be sent to the server and `repository` package will filter data and return it for `table-builder` to render:
@@ -505,10 +503,10 @@ return [
 
 That's all, now any validation errors will be displayed.
 
-## Custom filters 
+<!-- ## Custom filters  -->
 
 <!-- Building custom scope for searching in several fields. -->
 
-## Notifications
+<!-- ## Notifications -->
 
 <!-- success notification after new lead creation-->
