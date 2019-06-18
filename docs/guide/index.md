@@ -39,11 +39,11 @@ After migrating, we can finally access new section on `localhost/leads` and see 
 
 <img src="https://static.awes.io/docs/guide/01_basic_ui.png" alt="Awes.io">
 
-New localization file will also be created within the `resources/lang` directory, thanks to `awes-io/localization-helper` package, which we'll discuss later.
+Note that, new localization file will also be created within the `resources/lang` directory, thanks to the `awes-io/localization-helper` package, which we'll discuss later.
 
 ## Controller
 
-Let's check out the newly generated controller. It includes several methods, firstly `constructor`, in which we're injecting repository (more on this later):
+Let's check out the newly generated controller. It includes several methods, firstly `constructor`, in which repository instance is injected (more on this later):
 
 ```php
 public function __construct(LeadRepository $leads)
@@ -52,7 +52,7 @@ public function __construct(LeadRepository $leads)
 }
 ```
 
-`Index` method, where we return auto-generated blade template, as well as page title and all leads:
+`Index` method, where auto-generated blade template, as well as page title and all records, are returned:
 
 ```php
 public function index(Request $request)
@@ -64,9 +64,9 @@ public function index(Request $request)
 }
 ```
 
-`_p($file_key, $default, $placeholders)` is a helper function from our localization package, [more info is available in documentation](https://github.com/awes-io/localization-helper).
+> `_p($file_key, $default, $placeholders)` is a helper function from our localization package, [more info is available in documentation](https://github.com/awes-io/localization-helper).
 
-Scope method, which is used to retrieve, filter and sort lead records (more on this later):
+And `scope` method, which is used to retrieve, filter and sort leads records (more on this later):
 
 ```php
 public function scope(Request $request)
@@ -77,7 +77,7 @@ public function scope(Request $request)
 }
 ```
 
-We're also paginating results and transforming response data via auto-generated API resource class.
+Here we're also paginating results and transforming response data via auto-generated API resource class.
 
 ## Model
 
