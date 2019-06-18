@@ -2,7 +2,7 @@
 
 After [installing Awes-io](https://github.com/awes-io/awes-io#installation) you can create your first `section`.
 
-Sections are main building blocks for a project based on Awes-io platform. Let's create one and inspect its directory structure.
+Sections are main building blocks for a project based on [Awes-io platform](https://github.com/awes-io/awes-io). Let's create one and inspect its directory structure.
 
 To generate new section we can use `awes-io/generator` package and its Artisan command:
 
@@ -12,7 +12,7 @@ php artisan make:section Leads
 
 This command will place new controller, model, repository and resource classes within your `app/Sections/Leads` directory. As well as index blade template in `resources/views/sections/leads`.
 
-Let's also define basic routes to controller actions like so:
+In order to get a complete working `section`, we also need to define basic routes to controller actions like so:
 
 ```php
 // routes/web.php
@@ -35,7 +35,7 @@ Schema::create('leads', function (Blueprint $table) {
 ...
 ```
 
-After migrating, we can access new section on `localhost/leads` and see basic UI:
+After migrating, we can finally access new section on `localhost/leads` and see basic [Awes.io UI](https://github.com/awes-io/indigo-layout):
 
 <img src="https://static.awes.io/docs/guide/01_basic_ui.png" alt="Awes.io">
 
