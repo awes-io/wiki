@@ -81,7 +81,7 @@ Here we're also paginating results and transforming response data via auto-gener
 
 ## Model
 
-`Lead` model class is pretty simple, all we have is `$orderable` property, where we add all attributes we want to sort lead records by. We will discuss sorting later, but more info can be found in [awes-io/repository package documentation](https://github.com/awes-io/repository#scope-filter-and-order)
+`Lead` model class is pretty simple, all we have is `$orderable` property, where we add all attributes we want to sort our records by. We'll discuss sorting later, but more info can be found in [awes-io/repository package documentation](https://github.com/awes-io/repository#scope-filter-and-order)
 
 ```php
 public $orderable = [];
@@ -108,9 +108,7 @@ We will discuss repositories and their filtering and ordering features later in 
 
 ## View
 
-Auto-generated `index` template is located in `resources/views/sections/leads`.
-
-It extends main layout of `awes-io/indigo-layout` [package which contains useful styles and blade components](https://github.com/awes-io/indigo-layout) for fast building of responsive UI.
+Auto-generated `index` template is located in `resources/views/sections/leads` diretory. It extends main layout of `awes-io/indigo-layout` [package which contains useful styles and blade components](https://github.com/awes-io/indigo-layout) for fast building of responsive and stylish UI.
 
 ```php
 @extends('indigo-layout::main')
@@ -123,7 +121,7 @@ Next, there are meta title and description sections:
 @section('meta_description', _p('pages.leads.meta_description', 'meta_description'))
 ```
 
-Here we can see how `_p()` helper localization function is used. First argument is the file.key string, if we open newly created `resources/lang/en/pages.php` file we'll see different translation strings:
+Here we can once more see how `_p()` helper localization function is used. The first argument is the file.key string, if we open newly created `resources/lang/en/pages.php` file it'll contain different translation strings:
 
 ```php
 <?php
