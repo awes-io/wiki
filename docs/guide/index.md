@@ -336,7 +336,7 @@ What about sorting? We have an option to sort leads by names, let's make it work
 public $orderable = ['name'];
 ```
 
-Now let's add sorting by a lead status right into a table column. Firstly update `index` template:
+Now let's add sorting by a lead's status right into a table column. Firstly update `index` template:
 
 ```html
 <!-- <tb-column name="status" label="{{ _p('pages.leads.table.col.status', 'Status') }}"></tb-column> -->
@@ -373,7 +373,7 @@ If you want to add a new sorting option to `Sort by` drop-down menu, it's very s
 
 What if we need to create a new record? If you click the yellow action button, a new modal window will open, let's update it so we can create new leads.
 
-For now, all we have is one input field for a name. Let's add one more for status:
+For now, all we have is one input field for a name. We can add one more for status:
 
 ```html
 <!-- index.blade.php -->
@@ -383,16 +383,16 @@ For now, all we have is one input field for a name. Let's add one more for statu
 </form-builder>
 ```
 
-<img src="https://static.awes.io/docs/guide/15_create_lead_modal_window.png" alt="Awes.io">
+<img src="https://static.awes.io/docs/guide/15_create_lead_modal_window.png" alt="Awes.io" class="mb-20">
 
-And add a new route, to store data:
+And specify a route, to store data:
 
 ```html
 <!-- <form-builder url="" :disabled-dialog="true"> -->
 <form-builder url="{{ route('leads.store') }}" :disabled-dialog="true">
 ```
 
-Of course, we need to add a new route to `web.php` file:
+Of course, we also need to add it to `web.php` file:
 
 ```php
 Route::namespace('\App\Sections\Leads\Controllers')->prefix('leads')->group(function () {
@@ -401,7 +401,7 @@ Route::namespace('\App\Sections\Leads\Controllers')->prefix('leads')->group(func
 });
 ```
 
-Respective method to `LeadController` (we'll keep things as simple as possible for easy understanding):
+As well as a respective method in `LeadController` (we'll keep things as simple as possible and ignore validation, notifications, and other good stuff, for now):
 
 ```php
 public function store(Request $request)
@@ -416,20 +416,16 @@ And column names into `$fillable` model's property:
 public $fillable = ['name', 'status'];
 ```
 
-We can now create new leads, but it'd be really helpful if the table could refresh its content after that. To achieve that, we need to handle a successful response after creating a new record:
+We can now create new leads, but it'd be really helpful if the table could refresh its content. To achieve that, we need to handle a successful response. All we have to do is to emit an event and the table will auto-refresh after creating a new record.
 
 ```html
 <!-- <form-builder url="{{ route('leads.store') }}" :disabled-dialog="true"> -->
 <form-builder url="{{ route('leads.store') }}" :disabled-dialog="true" @sended="AWES.emit('content::leads:update')">
 ```
 
-All we do here is emiting event, now table will refresh after successfully creating a new record.
-
 ## Customizing table & updating existing leads
 
-At last, we want to implement something fun and really useful. How about modifying our table and creating a new modal window to update any of our leads data.
-
-Let's add new menu to each table row, with `edit lead` item:
+At last, we want to implement something fun and really useful. How about modifying our table and creating a new modal window to update any of our leads data. Let's add new menu to each table row, with `edit lead` item:
 
 ```html
 ...
@@ -445,11 +441,14 @@ Let's add new menu to each table row, with `edit lead` item:
 </tb-column>
 ```
 
-<img src="https://static.awes.io/docs/guide/16_edit_lead_menu.png" alt="Awes.io">
+<img src="https://static.awes.io/docs/guide/16_edit_lead_menu.png" alt="Awes.io" class="mb-20">
 
 And new modal window:
 
 ```html
+...
+</modal-window>
+
 <modal-window name="edit-lead" class="modal_formbuilder" title="{{ _p('pages.leads.modal.edit_lead.title', 'Edit lead') }}">
     <form-builder method="PATCH" url="/leads/{id}" store-data="editLead" @sended="AWES.emit('content::leads:update')">
         <fb-input name="name" label="{{ _p('pages.leads.modal_add.name', 'Name') }}"></fb-input>
@@ -460,7 +459,7 @@ And new modal window:
 
 Now if we click on the 'Edit' menu item in any table row, modal window with respective data will open:
 
-<img src="https://static.awes.io/docs/guide/17_edit_lead_modal_window.png" alt="Awes.io">
+<img src="https://static.awes.io/docs/guide/17_edit_lead_modal_window.png" alt="Awes.io" class="mb-20">
 
 It remains only to add a new `update` method to the controller and new `PATCH` route:
 
@@ -484,7 +483,7 @@ Just to make things even more interesting, let's update our project with some ea
 
 ## Validation errors
 
-It's always helpful to display user any validation errors if any does occur. This functionality is also supported by our platform.
+It's always helpful to display validation errors if any does occur. This functionality is also supported by our platform.
 
 Let's create a form request class using Artisan command:
 
