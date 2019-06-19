@@ -154,7 +154,9 @@ For now, just ignore `@click` code, we'll explain it later. Next goes `group fil
 
 <img src="https://static.awes.io/docs/guide/02_filter_group_component.png" alt="Awes.io">
 
-If we click on one of the filters, we'll see that it modifies `is_public` URL's parameter to respective value. Our component tracks these changes and sends server requests to get filtered data. We return to this topic later when will be creating additional filters ourselves.
+If we click on one of the filters, we'll see that it modifies `is_public` URL's parameter to respective value. Our component tracks these changes and sends server requests to get filtered data. 
+
+> In the future, you will often be able to observe similar behavior in many front-end components. All because, we have such a concept as the `page's state`, implemented through the `GET` parameters which are used to update the data based on their values. We return to this topic later when will be creating additional filters ourselves.
 
 Moving on, we can see one more very useful component - `context menu`, which in this case, controls the ordering of our leads by their names. 
 
@@ -347,7 +349,7 @@ as you can see we've added `sort` property to a respective table column, this wi
 
 <img src="https://static.awes.io/docs/guide/12_column_sorting_controls.png" alt="Awes.io">
 
-To make them work. we need to add `status` parameter to `$orderable` model property:
+To make them work, we need to add `status` parameter to `$orderable` model property:
 
 ```php
 public $orderable = ['name', 'status'];
@@ -491,7 +493,7 @@ Let's create a form request class using Artisan command:
 php artisan make:request '\App\Sections\Leads\Requests\StoreLead'
 ```
 
-And add some basic validation rules into it:
+Add some basic validation rules into it:
 
 ```php
 return [
@@ -500,7 +502,18 @@ return [
 ];
 ```
 
-That's all, now any validation errors will be displayed.
+And type-hint it into the controller's `store` method:
+
+```php
+use App\Sections\Leads\Requests\StoreLead;
+...
+public function store(StoreLead $request)
+...
+```
+
+That's all, now any validation errors will be displayed:
+
+<img src="https://static.awes.io/docs/guide/18_validation_errors.png" alt="Awes.io">
 
 <!-- ## Custom filters  -->
 
