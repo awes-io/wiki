@@ -32,6 +32,7 @@ Here is the implementation of the <filter-wrapper> component:
 | **name**       | `String`  | filter-${uid} | Unique identifier (ID)            |
 | **send-text**  | `String`  | `Apply`       | Text in the “Apply” button        |
 | **reset-text** | `String`  | `Reset`       | Text in the “Reset” button        |
+| **auto-submit**| `Boolean` | `undefined`   | If `true` the filter will be applied on fields value change |
 
 The filter has an *active state (Boolean)*, namely there are such parameters in the address bar which match the field names in the filter. You can get this value from the storage in the `$awesFilters` variable by the filter name, for example:
 

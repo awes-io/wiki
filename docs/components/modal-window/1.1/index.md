@@ -13,7 +13,7 @@ It is a modal window component with a tracked history. Below you will see a visu
 import Vue from 'vue'
 import VueRouter from 'vue-router' // required
 import modalWindow from '@awes-io/modal-window'
-import '@awes-io/modal-windwo/dist/main.css' // optionally, for default styling
+import '@awes-io/modal-window/dist/main.css' // optionally, for default styling
 
 Vue.use(VueRouter) // required
 Vue.use(modalWindow, { /* optional config */}) // registers `<modal-window>` component globally
@@ -55,7 +55,23 @@ include CDN-script, provided by the [platform](//awes.io)
 | **theme**      | `String`  | `'default'`  | Styling modal appearance, simply adds additional class to the wrapper, e.g. `is-${theme}` |
 | **param**      | `String`  | `'modal'`    | GET-parameter, that recieves a value of **name** param when window is opened. All the modals? by default, share the same GET-param. This means opening next modal closes previouse. |
 | **stay**       | `Boolean` | `false`      | Should the content stay in markup, when window is closed. *Could be configured globally* |
+| **bg-сlick-сlose** | `Boolean` | `true`   | Should the modal be closed by clicking on background. *Could be configured globally* |
 | **lang**       | `Object`  | [lang](#mw-lang) | Overwrite default lang strings in current modal. *Could be configured globally* |
+
+The properties, marked as **globally configured**, could be provided in `AWES_CONFIG` in camelCase. For example:
+
+```javascript
+const AWES_CONFIG = {
+
+    // some other config...
+
+    modalWindow: {
+        stay: true,
+        bgClickClose: false,
+        // ... other options
+    }
+}
+```
 
 
 ### Modal window ID
@@ -188,3 +204,59 @@ Transition styling colud be done with proper [Vue transition component classes](
 * modal-transition-awesome-leave
 * modal-transition-awesome-leave-active
 * modal-transition-awesome-leave-to
+
+
+## AJAX modal example
+
+To show dynamically loading content, place a `&lt;content-wrapper/&gt;` component inside a modal.
+
+> Note, that by default, content will be loaded **each time** modal is opened.
+> But if you use modal with `stay` prop turned on - content will be loaded **once**, after the page load
+
+```html
+<modal-window name="ajax-example" title="AJAX modal">
+
+    <!-- dynamic content -->
+    <content-wrapper url="https://jsonplaceholder.typicode.com/users">
+
+        <!-- loading state stylization -->
+        <template slot="loading">
+            <div class="h1 text-center">Loading...</div>
+        </template>
+
+        <!-- content -->
+        <template slot-scope="ajaxData">
+            <table-builder :default="ajaxData.data">
+                <tb-column name="name"></tb-column>
+                <tb-column name="email">
+                    <template slot-scope="col">
+                        <a :href="`mailto:${col.data.email}`">{{ col.data.email }}</a>
+                    </template>
+                </tb-column>
+            </table-builder>
+        </template><!-- / content -->
+
+    </content-wrapper>
+</modal-window>
+```
+
+<div class="vue-example">
+    <button class="btn" @click="AWES.emit('modal::ajax-example:open')">AJAX modal</button>
+    <modal-window name="ajax-example" title="AJAX modal">
+        <content-wrapper url="https://jsonplaceholder.typicode.com/users">
+            <template slot="loading">
+                <div class="h1 text-center">Loading...</div>
+            </template>
+            <template slot-scope="ajaxData">
+                <table-builder :default="ajaxData.data">
+                    <tb-column name="name"></tb-column>
+                    <tb-column name="email">
+                        <template slot-scope="col">
+                            <a :href="`mailto:${col.data.email}`">{{ col.data.email }}</a>
+                        </template>
+                    </tb-column>
+                </table-builder>
+            </template>
+        </content-wrapper>
+    </modal-window>
+</div>
