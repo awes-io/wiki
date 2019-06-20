@@ -59,5 +59,9 @@
   children:
     - name: "Chart Builder"
       link: "chart-builder"
+    - name: "Localization helper"
+      link: "localization-helper"
+    - name: "System Notify"
+      link: "system-notify"
     - name: "Virtual tour"
       link: "virtual-tour"
