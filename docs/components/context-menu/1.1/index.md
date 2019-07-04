@@ -54,6 +54,7 @@ wrappers, it doesn't make sense, so the minimal markup looks like
 | top           | **Boolean** | `false`      | Priority in opening the list upward [to be](#positioning-info) at the top of the opening button |
 | auto-position | **Boolean** | `true`       | [Automatic positioning](#positioning-auto) of the list depending on the specified boundaries and visibility on the screen  |
 | boundary      | **String**  | `body`       | Element selector - [boundaries](#positioning-bounds) for automatic list positioning |
+| relocate      | **Boolean** | `true`       | By default, dropdown will be appended to body element when opened. To disable this behaviour set `:relocate="false"`. It may be useful in fixed elements with it's own scroll |
 
 
 ## Positioning on the screen
