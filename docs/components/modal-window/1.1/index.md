@@ -121,13 +121,13 @@ function preventClose(event) {
         event.prevented = true
         alert('Not ready yet!')
     } else {
-        this.$modals.$off('modal::some-modal.before-close', preventClose)
-        // in AwesDotIo - AWES.off('modal::some-modal.before-close', preventClose)
+        this.$modals.$off('modal::some-modal:before-close', preventClose)
+        // in AwesDotIo - AWES.off('modal::some-modal:before-close', preventClose)
     }
 }
 
-this.$modals.$on('modal::some-modal.before-close', preventClose)
-// in AwesDotIo -AWES.on('modal::some-modal.before-close', preventClose)
+this.$modals.$on('modal::some-modal:before-close', preventClose)
+// in AwesDotIo -AWES.on('modal::some-modal:before-close', preventClose)
 ```
 
 ### Custom Event Bus

@@ -10,7 +10,7 @@ build:
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
     - docker system prune -af --volumes
   except: 
-    - branches  
+    - master  
   only:
     - tags
   when: on_success
@@ -27,7 +27,7 @@ stage:
   only:
     - tags
   except:
-    - branches
+    - master
   tags:
     - shell-runner
     
