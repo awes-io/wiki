@@ -1,0 +1,134 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: awes-wiki
+  labels:
+    app: awes-wiki
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: awes-wiki
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: awes-wiki-env
+  namespace: stage
+data:
+  GITHUB_REPO: XXX
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: awes-wiki
+  labels:
+    app: awes-wiki
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: awes-wiki
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 33%
+  template:
+    metadata:
+      labels:
+        app: awes-wiki
+    spec:
+      volumes:
+        # Create the shared files volume to be used in both pods
+        - name: shared-files-src
+          emptyDir: {}
+        - name: shared-files-html
+          emptyDir: {}
+        
+        # Add the ConfigMap we declared above as a volume for the pod
+        - name: awes-wiki-nginx-config-volume
+          configMap:
+            name: nginx-config
+      containers:
+        - name: awes-wiki
+          imagePullPolicy: Always
+          image: git.awescode.com:5005/awes/wiki:<VERSION>
+          envFrom:
+          - configMapRef:
+              name: awes-wiki-env
+          volumeMounts:
+            - name: shared-files-src
+              mountPath: /root/src
+            - name: shared-files-html
+              mountPath: /root/html
+            - name: awes-wiki-nginx-config-volume
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+          ports:
+            - containerPort: 8080
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", "cp -r /app/docs/. /root/src"]       
+        - name: vuepress
+          imagePullPolicy: Always
+          image: blasteh/vuepress:v1.3.2
+          envFrom:
+          - configMapRef:
+              name: awes-wiki-env
+          volumeMounts:
+            - name: shared-files-src
+              mountPath: /root/src
+            - name: shared-files-html
+              mountPath: /root/html
+      imagePullSecrets:
+        - name: gitlab-registry
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+ name: awes-wiki
+ labels:
+   app: awes-wiki
+spec:
+ rules:
+ - host: docs.awes.io
+   http:
+     paths:
+     - path: /
+       backend:
+         serviceName: awes-wiki
+         servicePort: 80
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: nginx-config
+data:
+  nginx.conf: |
+    events {
+    }
+    error_log /dev/stdout debug;
+    http {
+      access_log /dev/stdout;
+      server {
+        listen 8080 default_server;
+        listen [::]:8080 default_server;
+        root /root/html;
+        server_name _;
+        index index.php;
+        location / {
+          include  /etc/nginx/mime.types;
+          try_files $uri $uri/;
+        }
+        location = /favicon.ico { log_not_found off; access_log off; }
+        location = /robots.txt  { access_log off; log_not_found off; }
+        sendfile off;
+        client_max_body_size 100m;
+      }
+    }

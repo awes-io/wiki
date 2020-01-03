@@ -1,0 +1,92 @@
+version: "3"
+services:
+
+  # REDIS
+
+  easyweek-redis:
+    restart: always
+    hostname: easyweek-redis
+    container_name: easyweek-redis
+    image: redis:4.0-alpine
+    expose:
+      - "6379"
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./docker/redis:/data
+    networks:
+      easyweek:
+        ipv4_address: 172.133.0.2
+
+  # MYSQL
+
+  easyweek-mysql:
+    restart: always
+    hostname: easyweek-mysql
+    container_name: easyweek-mysql
+    image: mysql:5.7
+    expose:
+      - "3306"
+    ports:
+      - "3306:3306"
+    command: "--innodb_use_native_aio=0"
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: easyweek
+      MYSQL_DATABASE: easyweek
+      MYSQL_USER: easyweek
+      MYSQL_PASSWORD: easyweek
+    networks:
+      easyweek:
+          ipv4_address: 172.133.0.3
+
+
+  # PHP
+
+  easyweek-php:
+    image: 'easyweek-php'
+    build:
+      context: .
+      args:
+        APP_ENV: local
+    restart: always
+    hostname: easyweek-php
+    container_name: easyweek-php
+    expose:
+      - "9000"
+    volumes:
+      - ./:/app
+    links:
+      - easyweek-redis
+      - easyweek-mysql
+    networks:
+      easyweek:
+        ipv4_address: 172.133.0.4
+
+
+  # NGINX
+
+  easyweek-nginx:
+    restart: always
+    hostname: easyweek-nginx
+    container_name: easyweek-nginx
+    image: nginx:1.13
+    ports:
+      - "5381:5381"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf
+      - ./:/app
+    links:
+      - easyweek-php
+    networks:
+      easyweek:
+        ipv4_address: 172.133.0.6
+
+
+networks:
+  easyweek:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.133.0.0/24

@@ -1,29 +1,33 @@
-image: php:7.2
+stages:
+  - build
+  - stage
 
-cache:
-  paths:
-    - vendor/
-
-before_script:
-  # Install git, the php image doesn't have installed
-  - apt-get update -yqq
-  - apt-get install git -yqq
-
-  # Install Xdebug
-  - pecl install xdebug
-  - docker-php-ext-enable xdebug
-
-  # Install composer
-  - curl -sS https://getcomposer.org/installer | php
-
-  # Install all project dependencies
-  - php composer.phar install
-
-# Run our tests
-test:
-  only:
-    - master
-    - dev
+build:
+  stage: build
   script:
-    - vendor/bin/phpunit --configuration phpunit.xml --coverage-text --colors=never
-  coverage: '/^\s*Methods:\s*\d+.\d+\%\s*\(\d+\/\d+\)/'
+    - docker login -u gitlab-ci-token -p "$CI_BUILD_TOKEN" "$CI_REGISTRY"
+    - docker build -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG" .
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
+    - docker system prune -af --volumes
+  except: 
+    - branches  
+  only:
+    - tags
+  when: on_success
+  tags:
+    - shell-runner
+    
+stage:
+  stage: stage
+  script:
+    - sed -i "s/<VERSION>/${CI_COMMIT_TAG}/g" deployment-stage.yaml
+    - kubectl -n stage apply -f deployment-stage.yaml
+    - cat deployment-stage.yaml
+  when: on_success
+  only:
+    - tags
+  except:
+    - branches
+  tags:
+    - shell-runner
+    
