@@ -40,6 +40,8 @@ php artisan vendor:publish --provider="AwesIO\Auth\AuthServiceProvider" --tag="c
 
 You can disable additional features by commenting them out:
 
+Edit in config/awesio-auth.php
+
 ```php
 'enabled' => [
     'social', 
@@ -88,6 +90,7 @@ AUTHY_SECRET=
 ```
 
 If you enabled social and/or two factor authentication add respective traits to User model class:
+Typically in app\User.php
 
 ```php
 use AwesIO\Auth\Models\Traits\HasSocialAuthentication;
