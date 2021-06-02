@@ -40,7 +40,7 @@ An array should contain items which match the following scheme:
  */
 {
     name: 'Item name', // required parameter
-    link: '/link-ulr', // required if the `children` parameter is not specified
+    link: '/link-url', // required if the `children` parameter is not specified
     children: [ // required if the `link` parameter is not specified
         {
             name: 'Child item',
